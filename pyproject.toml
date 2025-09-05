@@ -1,6 +1,6 @@
 [project]
 name = "hostinit"
-version = "1.0.0"
+version = "1.0.1"
 description = "Host Configuration Automation"
 readme = "README.md"
 authors = [

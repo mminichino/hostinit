@@ -69,3 +69,7 @@ class StorageManager(object):
                     part_dev = device.get('partitions')[number - 1]
                     return f"/dev/{part_dev}"
         return None
+
+    @property
+    def device_count(self) -> int:
+        return len(self.device_list)
