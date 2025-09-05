@@ -34,7 +34,7 @@
           {{ matches[0].split() if matches else [] }}
     - name: Merge and de-duplicate search domains
       ansible.builtin.set_fact:
-        merged_search_domains: "{{ (search_from_resolv | default([])) | union(search_from_resolvectl | default([])) }}"
+        merged_search_domains: "{{ (search_from_resolv | from_yaml | default([])) | union(search_from_resolvectl | from_yaml | default([])) }}"
     - name: Drop config to disable DNSStubListener
       ansible.builtin.copy:
         dest: /etc/systemd/resolved.conf.d/disable-stub-listener.conf
@@ -59,7 +59,7 @@
           {% set search_list = merged_search_domains | default([]) %}
           {% if search_list and search_list | length > 0 -%}
           search {{ search_list | join(' ') }}
-          {%- endif %}
+          {% endif %}
           nameserver {{ dns_server }}
       notify: Restart systemd-resolved
 
