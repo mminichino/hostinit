@@ -204,7 +204,7 @@
           "Firewall",
           "THP",
           "Swappiness",
-          "Swap"
+          "MemTune"
         ],
         "pre": null,
         "run": "configure_data_mnt.yaml",
@@ -219,7 +219,7 @@
           "Firewall",
           "THP",
           "Swappiness",
-          "Swap"
+          "MemTune"
         ],
         "pre": null,
         "run": null,
@@ -282,6 +282,16 @@
         ],
         "pre": null,
         "run": "disable_dns_stub.yaml",
+        "post": null
+      }
+    },
+    "MemTune": {
+      "centos|rhel|amzn|rocky|ol|fedora|ubuntu|debian|opensuse-leap|sles": {
+        "requires": [
+          "Base"
+        ],
+        "pre": null,
+        "run": "mem_tune.yaml",
         "post": null
       }
     }
