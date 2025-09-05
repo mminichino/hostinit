@@ -56,7 +56,7 @@
         group: root
         mode: "0644"
         content: |
-          {% set search_list = (ternary(merged_search_domains | default([]), [])) %}
+          {% set search_list = merged_search_domains | default([]) %}
           {% if search_list and search_list | length > 0 -%}
           search {{ search_list | join(' ') }}
           {%- endif %}
