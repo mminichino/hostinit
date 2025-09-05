@@ -16,7 +16,7 @@
       when: swap_check_output.stdout != ""
     - name: Get Swap Device
       ansible.builtin.shell:
-        cmd: storagemgr -D -n 2
+        cmd: storagemgr -S
       register: swap_disk_output
     - set_fact:
         swap_disk_device: "{{ swap_disk_output.stdout }}"
