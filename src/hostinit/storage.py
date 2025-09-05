@@ -36,7 +36,11 @@ class StorageManager(object):
                 part_list = [p.get('name') for p in device.get('children')]
             self.device_list.append(dict(name=device_name, partitions=part_list))
 
-    def get_device(self, index: int = 1):
+    def get_device(self, index: int = 0):
+        if int == 0 and len(self.device_list) == 2:
+            index = 2
+        elif int == 0 and len(self.device_list) >= 3:
+            index = 3
         for device in [d.get('name') for d in self.device_list]:
             try:
                 logger.debug(f"checking device: {device}")
