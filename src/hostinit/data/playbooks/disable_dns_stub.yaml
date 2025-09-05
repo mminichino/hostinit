@@ -18,12 +18,9 @@
     - name: Extract search domains from resolv.conf
       ansible.builtin.set_fact:
         search_from_resolv: >-
-          {{
-            (
-              (resolv_slurp.content | b64decode | regex_search('(?m)^\\s*search\\s+(.+)$', '\\1'))
-              | default('', true)
-            ).split()
-          }}
+          {% set content = resolv_slurp.content | default('', true) | b64decode %}
+          {% set matches = content | regex_findall('(?m)^\\s*search\\s+(.+)$') %}
+          {{ matches[0].split() if matches else [] }}
     - name: Get domains from resolvectl (if available)
       ansible.builtin.command: resolvectl domain
       register: resolvectl_domain
@@ -32,17 +29,9 @@
     - name: Extract search domains from resolvectl output
       ansible.builtin.set_fact:
         search_from_resolvectl: >-
-          {{
-            (
-              resolvectl_domain.stdout | default('')
-            )
-            | regex_findall('(?m):\\s+(.+)$')        # take everything after ": "
-            | map('split', ' ')                      # split each line into domains
-            | list
-            | sum(start=[])                          # flatten
-            | select('match','^\\S+$')               # keep non-empty tokens
-            | list
-          }}
+          {% set content = resolvectl_domain.stdout | default('') %}
+          {% set matches = content | regex_findall('(?m):\\s+(.+)$') %}
+          {{ matches[0].split() if matches else [] }}
     - name: Merge and de-duplicate search domains
       ansible.builtin.set_fact:
         merged_search_domains: "{{ (search_from_resolv | default([])) | union(search_from_resolvectl | default([])) }}"
