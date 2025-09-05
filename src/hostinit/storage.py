@@ -37,9 +37,10 @@ class StorageManager(object):
             self.device_list.append(dict(name=device_name, partitions=part_list))
 
     def get_device(self, index: int = 0):
-        if int == 0 and len(self.device_list) == 2:
+        logger.debug(f"get_device: index: {index} devices: {len(self.device_list)}")
+        if index == 0 and len(self.device_list) == 2:
             index = 2
-        elif int == 0 and len(self.device_list) >= 3:
+        elif index == 0 and len(self.device_list) >= 3:
             index = 3
         for device in [d.get('name') for d in self.device_list]:
             try:
