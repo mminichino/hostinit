@@ -21,8 +21,8 @@ class BundleMgrCLI(CLI):
     @override()
     def local_args(self):
         self.parser.add_argument('-b', '--bundles', nargs='+', help='List of bundles to deploy')
-        self.parser.add_argument('-V', '--version', action='store', help="Software Version", default="latest")
-        self.parser.add_argument('-C', '--community', action='store_true', help="Software Edition")
+        self.parser.add_argument('-V', '--version', action='store', help="Software version", default="latest")
+        self.parser.add_argument('-D', '--dns', action='store', help="DNS server", default="8.8.8.8")
 
     def is_time_synced(self):
         return self.host_info.system.is_running("ntp") \
@@ -50,11 +50,6 @@ class BundleMgrCLI(CLI):
             'firewalld_enabled': self.is_firewalld_enabled()
         }
 
-        if self.options.community:
-            enterprise = False
-        else:
-            enterprise = True
-
         for b in self.options.bundles:
             self.op.add(b)
 
@@ -67,6 +62,9 @@ class BundleMgrCLI(CLI):
                     continue
                 for extra_var in bundle.extra_vars:
                     logger.info(f"Getting value for variable {extra_var}")
+                    if extra_var == "dns_server":
+                        dns_server = self.options.dns
+                        extra_vars.update({'dns_server': dns_server})
                 logger.info(f"Running playbook {playbook}")
                 stdout_save = sys.stdout
                 sys.stdout = StreamOutputLogger(logger, logging.INFO)
