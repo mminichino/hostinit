@@ -11,7 +11,7 @@ import inspect
 import traceback
 import datetime
 from ansible.cli.galaxy import GalaxyCLI
-from datetime import datetime
+from datetime import datetime, timezone
 from hostinit.bundles import SoftwareBundle
 from hostinit.hostinfo import HostInfo
 from hostinit.util import FileManager
@@ -132,7 +132,7 @@ class CLI(object):
 
     @staticmethod
     def run_timestamp(label: str):
-        timestamp = datetime.now(datetime.UTC).strftime("%b %d %H:%M:%S")
+        timestamp = datetime.now(timezone.utc).strftime("%b %d %H:%M:%S")
         logger.info(f" ==== Run {label} {timestamp} ====")
 
     def ansible_galaxy_install(self):
